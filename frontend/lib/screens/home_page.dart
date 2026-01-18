@@ -1,4 +1,4 @@
-import 'dart:async'; // NEW: Required for the Timer
+import 'dart:async'; 
 import 'package:flutter/material.dart';
 import 'tools/tools_page.dart';
 
@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  // --- TYPEWRITER VARIABLES ---
+  // Typing animation
   final String _fullText = "Hi! What would you like to cook today?";
   String _displayedText = "";
   int _characterIndex = 0;
@@ -26,12 +26,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _timer?.cancel(); // Clean up the timer when leaving the page
+    _timer?.cancel(); 
     super.dispose();
   }
 
   void _startTypewriter() {
-    // Reset variables
+    
     _displayedText = "";
     _characterIndex = 0;
 
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           _characterIndex++;
         });
       } else {
-        _timer?.cancel(); // Stop when finished
+        _timer?.cancel(); 
       }
     });
   }
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
     });
-    // Optional: Restart animation when switching back to Home tab
+    // Reset the animation when coming back to the home page
     if (index == 0) {
       _timer?.cancel();
       _startTypewriter();
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
-      // --- HOME PAGE ---
+      // Home page starts here
       SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -108,10 +108,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+
+              //Wenuka can insert anything here
+
             ],
           ),
         ),
       ),
+
       const ToolsPage(),
       const Center(child: Text("Planner page", style: TextStyle(fontSize: 20))),
       const Center(child: Text("Shop page", style: TextStyle(fontSize: 20))),
