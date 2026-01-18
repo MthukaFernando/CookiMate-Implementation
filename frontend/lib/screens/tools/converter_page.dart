@@ -18,6 +18,12 @@ class _ConverterPageState extends State<ConverterPage> {
   String _toWeightUnit = 'Kg';  
   double _weightResult = 0;  
 
+  // ---------------- TEMPERATURE CONVERTER ----------------  
+  TextEditingController _tempController = TextEditingController();  
+  String _fromTempUnit = '°C'; 
+  String _toTempUnit = '°F';  
+  double _tempResult = 0;  
+
   // ---------------- CONVERTER TYPE SELECTOR ----------------
   Widget _buildConverterSelector() {
     return Container(
@@ -56,12 +62,14 @@ class _ConverterPageState extends State<ConverterPage> {
    @override  
   void initState() {  
     super.initState();  
-    _weightController.addListener(_convertWeight);  
+    _weightController.addListener(_convertWeight);
+    _tempController.addListener(_convertTemperature);  
   }
 
   @override  
   void dispose() {  
     _weightController.dispose();  
+    _tempController.dispose();
     super.dispose();  
   }
 
@@ -100,6 +108,23 @@ class _ConverterPageState extends State<ConverterPage> {
 
     setState(() => _weightResult = result);
   }
+
+// ---------------- TEMPERATURE CONVERSION LOGIC ----------------
+  void _convertTemperature() {
+    double value = double.tryParse(_tempController.text) ?? 0;
+    double result = 0;
+
+    if (_fromTempUnit == '°C' && _toTempUnit == '°F') {
+      result = (value * 9 / 5) + 32;
+    } else if (_fromTempUnit == '°F' && _toTempUnit == '°C') {
+      result = (value - 32) * 5 / 9;
+    } else {
+      result = value;
+    }
+
+    setState(() => _tempResult = result);
+  }
+
 
   @override
   Widget build(BuildContext context) {
