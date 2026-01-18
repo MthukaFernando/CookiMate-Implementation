@@ -12,6 +12,41 @@ class _ConverterPageState extends State<ConverterPage> {
   // 0 = Weight, 1 = Temperature, 2 = Volume
   int _selectedConverterIndex = 0;
 
+  // ---------------- CONVERTER TYPE SELECTOR ----------------
+  Widget _buildConverterSelector() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: const Color(0xFFD8B084),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(3, (i) {
+          return GestureDetector(
+            onTap: () => setState(() => _selectedConverterIndex = i),
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+              decoration: BoxDecoration(
+                color: _selectedConverterIndex == i
+                    ? const Color(0xFFF8F0DE)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                ['Weight', 'Temperature', 'Volume'][i],
+                style: const TextStyle(
+                    fontWeight: FontWeight.w500, color: Colors.black),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,14 +60,15 @@ class _ConverterPageState extends State<ConverterPage> {
               color: const Color(0xFFE6C39A),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Column(
+            child: Column(
               children: [
-                SizedBox(height: 12),
-                Text(
+                const SizedBox(height: 12),
+                const Text(
                   'Converter',
                   style:
                       TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                _buildConverterSelector(), 
               ],
             ),
           ),
