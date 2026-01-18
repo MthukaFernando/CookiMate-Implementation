@@ -110,6 +110,40 @@ class _HomePageState extends State<HomePage> {
               ),
 
               //Wenuka can insert anything here
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildActionCard(
+                        icon: Icons.search,
+                        title: "Find recipes by ingredients",
+                        subtitle: "Tell me what you have and I'll find perfect recipes for you",
+                      ),
+                      const SizedBox(height: 18),
+                      _buildActionCard(
+                        icon: Icons.auto_awesome_mosaic_outlined,
+                        title: "Generate custom recipes",
+                        subtitle: "Describe what you want and I'll give you the recipe",
+                      ),
+                      const SizedBox(height: 18),
+                      _buildActionCard(
+                        icon: Icons.person_search_outlined,
+                        title: "Go to Community Page",
+                        subtitle: "Join the community, explore other's posts and recipes, leave a like and comment and share your cooking with friends!",
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              
 
             ],
           ),
@@ -143,4 +177,76 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+Widget _buildActionCard({required IconData icon, required String title, required String subtitle}) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(22),
+      // --- ENHANCED 3D SHADOW ---
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1), // Soft outer glow
+          blurRadius: 20,
+          offset: const Offset(0, 4),
+        ),
+        BoxShadow(
+          color: Colors.black.withOpacity(0.2), // Darker bottom shadow for depth
+          blurRadius: 8,
+          offset: const Offset(0, 8), // Moves the shadow down to create height
+        ),
+      ],
+      // Adding a very light border makes the edges pop against the brown
+      border: Border.all(color: Colors.white.withOpacity(0.5), width: 1),
+    ),
+    child: Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black, width: 1.5),
+            borderRadius: BorderRadius.circular(14),
+            // Minimal shadow for the icon box to make it look inset
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              )
+            ]
+          ),
+          child: Icon(icon, size: 32, color: Colors.black),
+        ),
+        const SizedBox(width: 15),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2E2E2E),
+                  letterSpacing: -0.5,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                  height: 1.3,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }
+  }
