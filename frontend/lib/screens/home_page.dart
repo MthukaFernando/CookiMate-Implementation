@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                             _displayedText, // Shows the text as it "types"
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 23,
+                              fontSize: 24,
                               fontWeight: FontWeight.bold,
                               color: const Color.fromARGB(255, 62, 51, 35),
                               fontFamily: 'Courier', // Gives it a typewriter feel
@@ -125,18 +125,24 @@ class _HomePageState extends State<HomePage> {
                         icon: Icons.search,
                         title: "Find recipes by ingredients",
                         subtitle: "Tell me what you have and I'll find perfect recipes for you",
+                        borderColor: const Color(0xFF522F2F),
+                        iconBgColor: const Color.fromARGB(255, 240, 228, 190),
                       ),
                       const SizedBox(height: 18),
                       _buildActionCard(
                         icon: Icons.auto_awesome_mosaic_outlined,
                         title: "Generate custom recipes",
                         subtitle: "Describe what you want and I'll give you the recipe",
+                        borderColor: const Color.fromARGB(255, 161, 95, 36),
+                        iconBgColor: const Color.fromARGB(255, 240, 228, 190),
                       ),
                       const SizedBox(height: 18),
                       _buildActionCard(
                         icon: Icons.person_search_outlined,
                         title: "Go to Community Page",
                         subtitle: "Join the community, explore other's posts and recipes, leave a like and comment and share your cooking with friends!",
+                        borderColor: const Color.fromARGB(255, 198, 181, 110),
+                        iconBgColor: const Color.fromARGB(255, 240, 228, 190),
                       ),
                     ],
                   ),
@@ -177,7 +183,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-Widget _buildActionCard({required IconData icon, required String title, required String subtitle}) {
+Widget _buildActionCard({required IconData icon, required String title, required String subtitle, required Color borderColor, required Color iconBgColor,}) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
     decoration: BoxDecoration(
@@ -197,14 +203,13 @@ Widget _buildActionCard({required IconData icon, required String title, required
         ),
       ],
       // Adding a very light border makes the edges pop against the brown
-      border: Border.all(color: Colors.white.withOpacity(0.5), width: 1),
-    ),
+      border: Border.all(color: borderColor,width: 3,),),
     child: Row(
       children: [
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: iconBgColor,
             border: Border.all(color: Colors.black, width: 1.5),
             borderRadius: BorderRadius.circular(14),
             // Minimal shadow for the icon box to make it look inset
