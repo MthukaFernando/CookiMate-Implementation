@@ -24,6 +24,12 @@ class _ConverterPageState extends State<ConverterPage> {
   String _toTempUnit = '°F';  
   double _tempResult = 0;  
 
+  // ---------------- VOLUME CONVERTER ----------------  
+  TextEditingController _volumeController = TextEditingController(); 
+  String _fromVolumeUnit = 'Cup'; 
+  String _toVolumeUnit = 'ml';  
+  double _volumeResult = 0;
+
   // ---------------- CONVERTER TYPE SELECTOR ----------------
   Widget _buildConverterSelector() {
     return Container(
@@ -63,13 +69,15 @@ class _ConverterPageState extends State<ConverterPage> {
   void initState() {  
     super.initState();  
     _weightController.addListener(_convertWeight);
-    _tempController.addListener(_convertTemperature);  
+    _tempController.addListener(_convertTemperature); 
+    _volumeController.addListener(_convertVolume); 
   }
 
   @override  
   void dispose() {  
     _weightController.dispose();  
     _tempController.dispose();
+    _volumeController.dispose();
     super.dispose();  
   }
 
@@ -123,6 +131,27 @@ class _ConverterPageState extends State<ConverterPage> {
     }
 
     setState(() => _tempResult = result);
+  }
+
+  // ---------------- VOLUME CONVERSION LOGIC ----------------
+  void _convertVolume() {
+    double value = double.tryParse(_volumeController.text) ?? 0;
+
+    // Conversion factors mapped to milliliters
+    Map<String, double> toMl = {
+      'Cup': 236.588,
+      'ml': 1,
+      'Tbsp': 14.787,
+      'Tsp': 4.929,
+      'L': 1000,
+      'pint': 473.176,
+    };
+
+    // Convert from selected unit -> ml -> target unit
+    double valueInMl = value * toMl[_fromVolumeUnit]!;
+    double result = valueInMl / toMl[_toVolumeUnit]!;
+
+    setState(() => _volumeResult = result);
   }
 
 
