@@ -13,8 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFF2EBE0), // Matching your screenshot
-        useMaterial3: true,
+        scaffoldBackgroundColor: const Color(0xFFF2EBE0), 
       ),
       home: const HomePage(),
     );
