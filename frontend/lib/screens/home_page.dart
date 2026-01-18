@@ -1,3 +1,4 @@
+import 'dart:async'; // NEW: Required for the Timer
 import 'package:flutter/material.dart';
 import 'tools/tools_page.dart';
 
@@ -9,71 +10,131 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // 1. MEMORY: This variable tracks which tab is currently active.
   int _selectedIndex = 0;
 
-  // 2. PAGES: This list holds the widgets that will show up in the body.
-  // When _selectedIndex is 0, it shows Home. When it is 1, it shows Tools.
-  final List<Widget> _pages = [
-    const Center(child: Text("This is the Home Page", style: TextStyle(fontSize: 20))),
-    const ToolsPage(),
-    const Center(child: Text("Planner page")),
-    const Center(child: Text("Shop page")),
-    const Center(child: Text("Profile page")),
-  ];
+  // --- TYPEWRITER VARIABLES ---
+  final String _fullText = "Hi! What would you like to cook today?";
+  String _displayedText = "";
+  int _characterIndex = 0;
+  Timer? _timer;
 
-  // 3. LOGIC: This function runs every time you tap a bottom icon.
-  // setState tells Flutter to refresh the screen with the new index.
+  @override
+  void initState() {
+    super.initState();
+    _startTypewriter();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); // Clean up the timer when leaving the page
+    super.dispose();
+  }
+
+  void _startTypewriter() {
+    // Reset variables
+    _displayedText = "";
+    _characterIndex = 0;
+
+    // Timer adds one letter every 50-100 milliseconds
+    _timer = Timer.periodic(const Duration(milliseconds: 80), (timer) {
+      if (_characterIndex < _fullText.length) {
+        setState(() {
+          _displayedText += _fullText[_characterIndex];
+          _characterIndex++;
+        });
+      } else {
+        _timer?.cancel(); // Stop when finished
+      }
+    });
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    // Optional: Restart animation when switching back to Home tab
+    if (index == 0) {
+      _timer?.cancel();
+      _startTypewriter();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      // --- HOME PAGE ---
+      SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  width: double.infinity,
+                  height: 350,
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE6D2B5),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Stack(
+                    children: [
+                      // 1. The Mascot
+                      Positioned.fill(
+                        child: Image.asset(
+                          'assets/images/mascot.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      // 2. The Animated Text
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Text(
+                            _displayedText, // Shows the text as it "types"
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 23,
+                              fontWeight: FontWeight.bold,
+                              color: const Color.fromARGB(255, 62, 51, 35),
+                              fontFamily: 'Courier', // Gives it a typewriter feel
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      const ToolsPage(),
+      const Center(child: Text("Planner page", style: TextStyle(fontSize: 20))),
+      const Center(child: Text("Shop page", style: TextStyle(fontSize: 20))),
+      const Center(child: Text("Profile page", style: TextStyle(fontSize: 20))),
+    ];
+
     return Scaffold(
-      // The body updates automatically based on our list and the current index
+      backgroundColor: const Color(0xFFF2ECE2),
       body: _pages[_selectedIndex],
-
       bottomNavigationBar: BottomNavigationBar(
-        // 'fixed' ensures all 5 labels and icons stay visible
+        backgroundColor: const Color(0xFFE6D2B5),
         type: BottomNavigationBarType.fixed,
-        
-        // This links the visual highlight to our variable
         currentIndex: _selectedIndex,
-        
-        // This calls our function when a user taps the bar
         onTap: _onItemTapped,
-        
-        // Design settings to match your photo
-        selectedItemColor: const Color(0xFFB8967E), // The tan color from your screenshot
-        unselectedItemColor: Colors.black,          // Black for inactive icons
-        showUnselectedLabels: true,                 // Always show the text labels
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-
+        selectedItemColor: const Color.fromARGB(255, 141, 115, 97),
+        unselectedItemColor: Colors.black,
+        showUnselectedLabels: true,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store), 
-            label: 'HOME',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.access_time), 
-            label: 'TOOLS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month), 
-            label: 'PLANNER',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart), 
-            label: 'SHOP',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle), 
-            label: 'PROFILE',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.store), label: 'HOME'),
+          BottomNavigationBarItem(icon: Icon(Icons.access_time), label: 'TOOLS'),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'PLANNER'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'SHOP'),
+          BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'PROFILE'),
         ],
       ),
     );
