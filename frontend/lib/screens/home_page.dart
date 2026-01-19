@@ -1,4 +1,4 @@
-import 'dart:async'; 
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'tools/tools_page.dart';
 
@@ -26,16 +26,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _timer?.cancel(); 
+    _timer?.cancel();
     super.dispose();
   }
 
   void _startTypewriter() {
-    
     _displayedText = "";
     _characterIndex = 0;
 
-    // Timer adds one letter every 50-100 milliseconds
     _timer = Timer.periodic(const Duration(milliseconds: 80), (timer) {
       if (_characterIndex < _fullText.length) {
         setState(() {
@@ -43,7 +41,7 @@ class _HomePageState extends State<HomePage> {
           _characterIndex++;
         });
       } else {
-        _timer?.cancel(); 
+        _timer?.cancel();
       }
     });
   }
@@ -52,17 +50,105 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
     });
-    // Reset the animation when coming back to the home page
+
     if (index == 0) {
       _timer?.cancel();
       _startTypewriter();
     }
   }
 
+  // ================= CHAT POPUP =================
+  void _openChatBox() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: const Color(0xFFF2ECE2),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: Column(
+              children: [
+                const SizedBox(height: 12),
+                Container(
+                  width: 40,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                const SizedBox(height: 15),
+
+                const Text(
+                  "Chat with CookiMate",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                // Empty messages area
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      "Start a conversation 👋",
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Input box
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: "Type your message...",
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      CircleAvatar(
+                        backgroundColor: const Color(0xFF522F2F),
+                        child: IconButton(
+                          icon: const Icon(Icons.send, color: Colors.white),
+                          onPressed: () {},
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
-      // Home page starts here
       SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -80,26 +166,30 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: Stack(
                     children: [
-                      // 1. The Mascot
+                      // Mascot (clickable)
                       Positioned.fill(
-                        child: Image.asset(
-                          'assets/images/mascot.png',
-                          fit: BoxFit.cover,
+                        child: GestureDetector(
+                          onTap: _openChatBox,
+                          child: Image.asset(
+                            'assets/images/mascot.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                      // 2. The Animated Text
+
+                      // Animated text
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: Text(
-                            _displayedText, // Shows the text as it "types"
+                            _displayedText,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: const Color.fromARGB(255, 62, 51, 35),
-                              fontFamily: 'Courier', // Gives it a typewriter feel
+                              color: Color.fromARGB(255, 62, 51, 35),
+                              fontFamily: 'Courier',
                             ),
                           ),
                         ),
@@ -109,57 +199,52 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
 
-              //Wenuka can insert anything here
               const SizedBox(height: 30),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Column(
-                    children: [
-                      _buildActionCard(
-                        icon: Icons.search,
-                        title: "Find recipes by ingredients",
-                        subtitle: "Tell me what you have and I'll find perfect recipes for you",
-                        borderColor: const Color(0xFF522F2F),
-                        iconBgColor: const Color.fromARGB(255, 240, 228, 190),
-                      ),
-                      const SizedBox(height: 18),
-                      _buildActionCard(
-                        icon: Icons.auto_awesome_mosaic_outlined,
-                        title: "Generate custom recipes",
-                        subtitle: "Describe what you want and I'll give you the recipe",
-                        borderColor: const Color.fromARGB(255, 161, 95, 36),
-                        iconBgColor: const Color.fromARGB(255, 240, 228, 190),
-                      ),
-                      const SizedBox(height: 18),
-                      _buildActionCard(
-                        icon: Icons.person_search_outlined,
-                        title: "Go to Community Page",
-                        subtitle: "Join the community, explore other's posts and recipes, leave a like and comment and share your cooking with friends!",
-                        borderColor: const Color.fromARGB(255, 198, 181, 110),
-                        iconBgColor: const Color.fromARGB(255, 240, 228, 190),
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    _buildActionCard(
+                      icon: Icons.search,
+                      title: "Find recipes by ingredients",
+                      subtitle:
+                          "Tell me what you have and I'll find perfect recipes for you",
+                      borderColor: const Color(0xFF522F2F),
+                      iconBgColor: const Color.fromARGB(255, 240, 228, 190),
+                    ),
+                    const SizedBox(height: 18),
+                    _buildActionCard(
+                      icon: Icons.auto_awesome_mosaic_outlined,
+                      title: "Generate custom recipes",
+                      subtitle:
+                          "Describe what you want and I'll give you the recipe",
+                      borderColor:
+                          const Color.fromARGB(255, 161, 95, 36),
+                      iconBgColor: const Color.fromARGB(255, 240, 228, 190),
+                    ),
+                    const SizedBox(height: 18),
+                    _buildActionCard(
+                      icon: Icons.person_search_outlined,
+                      title: "Go to Community Page",
+                      subtitle:
+                          "Join the community, explore posts and share recipes!",
+                      borderColor:
+                          const Color.fromARGB(255, 198, 181, 110),
+                      iconBgColor: const Color.fromARGB(255, 240, 228, 190),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 20),
-              
-
             ],
           ),
         ),
       ),
-
       const ToolsPage(),
-      const Center(child: Text("Planner page", style: TextStyle(fontSize: 20))),
-      const Center(child: Text("Shop page", style: TextStyle(fontSize: 20))),
-      const Center(child: Text("Profile page", style: TextStyle(fontSize: 20))),
+      const Center(child: Text("Planner page")),
+      const Center(child: Text("Shop page")),
+      const Center(child: Text("Profile page")),
     ];
 
     return Scaffold(
@@ -176,82 +261,64 @@ class _HomePageState extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.store), label: 'HOME'),
           BottomNavigationBarItem(icon: Icon(Icons.access_time), label: 'TOOLS'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'PLANNER'),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'SHOP'),
-          BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'PROFILE'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month), label: 'PLANNER'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart), label: 'SHOP'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle), label: 'PROFILE'),
         ],
       ),
     );
   }
-Widget _buildActionCard({required IconData icon, required String title, required String subtitle, required Color borderColor, required Color iconBgColor,}) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(22),
-      // --- ENHANCED 3D SHADOW ---
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.1), // Soft outer glow
-          blurRadius: 20,
-          offset: const Offset(0, 4),
-        ),
-        BoxShadow(
-          color: Colors.black.withOpacity(0.2), // Darker bottom shadow for depth
-          blurRadius: 8,
-          offset: const Offset(0, 8), // Moves the shadow down to create height
-        ),
-      ],
-      // Adding a very light border makes the edges pop against the brown
-      border: Border.all(color: borderColor,width: 3,),),
-    child: Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: iconBgColor,
-            border: Border.all(color: Colors.black, width: 1.5),
-            borderRadius: BorderRadius.circular(14),
-            // Minimal shadow for the icon box to make it look inset
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              )
-            ]
+
+  Widget _buildActionCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color borderColor,
+    required Color iconBgColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: borderColor, width: 3),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
           ),
-          child: Icon(icon, size: 32, color: Colors.black),
-        ),
-        const SizedBox(width: 15),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF2E2E2E),
-                  letterSpacing: -0.5,
-                ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                  height: 1.3,
-                ),
-              ),
-            ],
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: iconBgColor,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(icon, size: 32),
           ),
-        ),
-      ],
-    ),
-  );
-}
+          const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,
+                    style: const TextStyle(
+                        fontSize: 17, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 5),
+                Text(subtitle,
+                    style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
+}
