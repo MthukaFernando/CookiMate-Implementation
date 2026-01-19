@@ -275,6 +275,37 @@ class _ConverterPageState extends State<ConverterPage> {
     );
   }
 
+  // ---------------- INDIVIDUAL CONVERTERS ----------------
+  Widget _buildWeightConverter() => _buildConverterLayout(
+    _weightController,
+    _fromWeightUnit,
+    _toWeightUnit,
+    _weightResult,
+    ['Ib', 'Kg', 'g', 'oz'],
+    (v) => setState(() => _fromWeightUnit = v),
+    (v) => setState(() => _toWeightUnit = v),
+  );
+
+  Widget _buildTemperatureConverter() => _buildConverterLayout(
+    _tempController,
+    _fromTempUnit,
+    _toTempUnit,
+    _tempResult,
+    ['°C', '°F'],
+    (v) => setState(() => _fromTempUnit = v),
+    (v) => setState(() => _toTempUnit = v),
+  );
+
+  Widget _buildVolumeConverter() => _buildConverterLayout(
+    _volumeController,
+    _fromVolumeUnit,
+    _toVolumeUnit,
+    _volumeResult,
+    ['Cup', 'ml', 'Tbsp', 'Tsp', 'L', 'pint'],
+    (v) => setState(() => _fromVolumeUnit = v),
+    (v) => setState(() => _toVolumeUnit = v),
+  );
+
 
   @override
   Widget build(BuildContext context) {
@@ -297,7 +328,14 @@ class _ConverterPageState extends State<ConverterPage> {
                   style:
                       TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                _buildConverterSelector(), 
+                _buildConverterSelector(),
+                Expanded(  
+                  child: [
+                    _buildWeightConverter(),
+                    _buildTemperatureConverter(),
+                    _buildVolumeConverter(),
+                  ][_selectedConverterIndex],
+                ),  
               ],
             ),
           ),
