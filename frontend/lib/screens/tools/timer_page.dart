@@ -77,7 +77,7 @@ class _TimerPageState extends State<TimerPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 53),
 
             // Main Timer Card
             Container(
