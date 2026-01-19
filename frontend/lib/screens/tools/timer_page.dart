@@ -14,6 +14,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+//Used stateful widget as timer value changes over time
 class TimerPage extends StatefulWidget {
   const TimerPage({super.key});
 
@@ -22,7 +23,7 @@ class TimerPage extends StatefulWidget {
 }
 
 class _TimerPageState extends State<TimerPage> {
-  // Colors for the Cookimate theme
+  // Added colors to match CookiMate's color palette
   final Color cardColor = const Color(0xFFD9B99B);
   final Color buttonTextColor = const Color(0xFF4A3F35);
   final Color secondaryColor = const Color(0xFFF5EFE6);
@@ -37,6 +38,7 @@ class _TimerPageState extends State<TimerPage> {
     super.dispose();
   }
 
+  // Starts or pauses the timer depending on the current state
   void _toggleTimer() {
     if (_isRunning) {
       _timer?.cancel();
@@ -51,13 +53,15 @@ class _TimerPageState extends State<TimerPage> {
   }
 
   void _resetTimer() {
+    _timer?.cancel(); // Stop the timer first
+    _timer = null;    // completely delete it
     setState(() {
-      _timer?.cancel();
       _seconds = 0;
       _isRunning = false;
     });
   }
 
+  // Converts seconds into HH : MM : SS format
   String _formatTime() {
     int h = _seconds ~/ 3600;
     int m = (_seconds % 3600) ~/ 60;
