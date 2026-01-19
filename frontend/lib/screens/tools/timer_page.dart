@@ -51,8 +51,9 @@ class _TimerPageState extends State<TimerPage> {
   }
 
   void _resetTimer() {
+    _timer?.cancel(); // Stop the timer first
+    _timer = null;    // completely delete it
     setState(() {
-      _timer?.cancel();
       _seconds = 0;
       _isRunning = false;
     });
