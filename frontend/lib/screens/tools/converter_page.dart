@@ -201,6 +201,80 @@ class _ConverterPageState extends State<ConverterPage> {
     return result;
   }
 
+  // Shared layout for all converter types
+  Widget _buildConverterLayout(
+    TextEditingController controller,
+    String fromUnit,
+    String toUnit,
+    double result,
+    List<String> units,
+    Function(String) onFrom,
+    Function(String) onTo,
+  ) {
+    return Container(
+      color: const Color(0xFFE6C39A),
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              const Text(
+                'From:',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: 100,
+                child: TextField(
+                  controller: controller,
+                  textAlign: TextAlign.center,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: 'Value',
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildUnitSelector(units, fromUnit, onFrom),
+            ],
+          ),
+          const Icon(Icons.swap_horiz, size: 32),
+          Column(
+            children: [
+              const Text('To:', style: TextStyle(fontWeight: FontWeight.w600)),
+              const SizedBox(height: 8),
+              Container(
+                width: 100,
+                height: 48,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  _formatNumber(result),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildUnitSelector(units, toUnit, onTo),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
