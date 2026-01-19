@@ -154,6 +154,31 @@ class _ConverterPageState extends State<ConverterPage> {
     setState(() => _volumeResult = result);
   }
 
+    // ---------------- DROPDOWN UNIT SELECTOR ----------------
+  Widget _buildUnitSelector(
+    List<String> units,
+    String selectedUnit,
+    Function(String) onChanged,
+  ) {
+    return DropdownButton<String>(
+      value: selectedUnit,
+      items: units.map((unit) {
+        return DropdownMenuItem(
+          value: unit,
+          child: Text(
+            unit,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        );
+      }).toList(),
+      onChanged: (value) => onChanged(value!),
+      dropdownColor: const Color(0xFFF8F0DE),
+      style: const TextStyle(color: Colors.black),
+      icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
+      underline: Container(height: 2, color: Colors.black),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
