@@ -179,6 +179,28 @@ class _ConverterPageState extends State<ConverterPage> {
     );
   }
 
+    // ---------------- NUMBER FORMATTING ----------------
+  // Rounds values to 2 decimal places for display only
+  String _formatNumber(double value) {
+    if (value == 0) return '0';
+
+    // Check if value is effectively an integer
+    if (value.abs() - value.abs().truncate() < 0.000001) {
+      return value.truncate().toString();
+    }
+
+    // Display up to 2 decimal places
+    String result = value.toStringAsFixed(2);
+
+    // Remove trailing zeros (e.g. 2.00 -> 2, 2.50 -> 2.5)
+    while (result.contains('.') &&
+        (result.endsWith('0') || result.endsWith('.'))) {
+      result = result.substring(0, result.length - 1);
+    }
+
+    return result;
+  }
+
 
   @override
   Widget build(BuildContext context) {
